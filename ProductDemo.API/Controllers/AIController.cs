@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProductDemo.API.Services;
 using ProductDemo.API.Data;
+using ProductDemo.API.Helpers;
 using ProductDemo.API.Services.Interfaces;
 
 namespace ProductDemo.API.Controllers
@@ -10,14 +10,17 @@ namespace ProductDemo.API.Controllers
     public class AIController : ControllerBase
     {
         private readonly IEmbeddingService _embeddingService;
+        private readonly IPromptService _promptService;
         private readonly AppDbContext _db;
 
-        public AIController(IEmbeddingService embeddingService, AppDbContext db)
+        public AIController(IEmbeddingService embeddingService, IPromptService promptService, AppDbContext db)
         {
+            _promptService = promptService;
             _embeddingService = embeddingService;
             _db = db;
         }
 
+        // EMBEDDING
         /// <summary>
         /// Step 2: Generate an embedding for an existing product.
         /// Example: POST /api/ai/embed-product/1
@@ -49,6 +52,22 @@ namespace ProductDemo.API.Controllers
             var results = await _embeddingService.SearchProductsAsync(q, topN);
 
             return Ok(results);
+        }
+
+        // PROMPT
+        /// <summary>
+        /// Ask a question about products using RAG.
+        /// Example: GET /api/ai/ask?question=What’s the cheapest product?
+        /// </summary>
+        [HttpGet("ask")]
+        public async Task<IActionResult> Ask([FromQuery] string question)
+        {
+            if (string.IsNullOrWhiteSpace(question))
+                return BadRequest("Question cannot be empty");
+
+            var answer = await _promptService.AnswerAsync(question);
+
+            return Ok(ApiResponse<string>.SuccessResponse(answer, "Answer generated successfully"));
         }
     }
 }

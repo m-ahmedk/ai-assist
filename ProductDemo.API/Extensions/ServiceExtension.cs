@@ -121,6 +121,7 @@ namespace ProductDemo.API.Extensions
             services.AddScoped<IAuthTokenService, AuthTokenService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IEmbeddingService, EmbeddingService>();
+            services.AddScoped<IPromptService, PromptService>();
 
             return services;
         }
