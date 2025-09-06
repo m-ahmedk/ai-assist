@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "ProductDemo.API.Controllers.AIController",
+    "Method": "Ask",
+    "RelativePath": "api/AI/ask",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "question",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ProductDemo.API.Controllers.AIController",
     "Method": "EmbedProduct",
     "RelativePath": "api/AI/embed-product/{id}",
     "HttpMethod": "POST",
